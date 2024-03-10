@@ -99,8 +99,7 @@ if [ -n "$FLAG_NODE" ]; then
   sudo apt-get install -y nodejs
   announce Install NVM
   curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
-  nvm install 20
-  nvm use 20
+  source /home/$USER/.bashrc
 fi
 
 # fail2ban
@@ -114,7 +113,10 @@ fi
 # ZFS
 if [ -n "$FLAG_ZFS" ]; then
   announce Install ZFS Drivers
-  apt-get install -y linux-headers-amd64 zfsutils-linux zfs-dkms zfs-zed
+  codename=$(lsb_release -cs);
+  echo "deb http://deb.debian.org/debian $codename-backports main contrib non-free"|sudo tee -a /etc/apt/sources.list && sudo apt update
+  sudo apt install -y linux-headers-amd64
+  sudo apt install -y -t stable-backports zfsutils-linux
   zpool import storage -f
 fi
 
