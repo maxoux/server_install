@@ -11,7 +11,7 @@ FLAG_GPU=1
 FLAG_GPU_DOCKER_TOOLKIT=1
 FLAG_ZFS=1
 
-FLAG_CLEANUP=1
+# FLAG_CLEANUP=1
 
 USER=maxoux
 INSTALL_REPO=https://github.com/maxoux/server_install
@@ -33,26 +33,27 @@ if [ "$(id -u)" -ne 0 ]; then echo "Please run as root." >&2; exit 1; fi
 echo Working Directory: $WORK_DIR
 cd $WORK_DIR
 
-if [ -n "$FLAG_UPDATE" ]; then
-  announce Updating...
-  apt-get update -y && apt-get upgrade -y
-fi
-
 # Default installs
 announce Installing basic utils
+apt-get update
 apt-get -y install git wget curl tree htop ca-certificates make openssh-server sudo
 
 announce Cloning Repository
 git clone $INSTALL_REPO $REPO_DIR
 
-announce Set up $USER as sudoer
-usermod -aG sudo maxoux
-
 if [ -n "$FLAG_APT" ]; then
   announce Override apt source lists
-  cp ./$REPO_DIR/source.list /etc/apt/source.list
+  cp ./$REPO_DIR/source.list /etc/apt/sources.list
   apt-get update
+
+  if [ -n "$FLAG_UPDATE" ]; then
+    announce Updating...
+    apt-get update -y && apt-get upgrade -y
+  fi
 fi
+
+announce Set up $USER as sudoer
+usermod -aG sudo maxoux
 
 # SSH
 announce Setting up SSH keys
@@ -63,6 +64,13 @@ cat ./$REPO_DIR/public_keys/* > /home/$USER/.ssh/authorized_keys
 if [ -n "$FLAG_BASHRC" ]; then
   announce Installing bashrc
   mv $REPO_DIR/.bashrc /home/$USER/
+fi
+
+# Nvidia driver
+if [ -n "$FLAG_GPU" ]; then
+  announce Install GPU drivers
+  apt install -y nvidia-kernel-dkms
+  apt-get install -y nvidia-driver
 fi
 
 # Docker
@@ -80,6 +88,18 @@ if [ -n "$FLAG_DOCKER" ]; then
 
   announce Enabling docker for $USER
   usermod -aG docker maxoux
+
+  if [ -n "$FLAG_GPU_DOCKER_TOOLKIT" ]; then
+    announce Install GPU Docker Toolkit
+    curl -fsSL https://nvidia.github.io/libnvidia-container/gpgkey | sudo gpg --dearmor -o /usr/share/keyrings/nvidia-container-toolkit-keyring.gpg \
+      && curl -s -L https://nvidia.github.io/libnvidia-container/stable/deb/nvidia-container-toolkit.list | \
+        sed 's#deb https://#deb [signed-by=/usr/share/keyrings/nvidia-container-toolkit-keyring.gpg] https://#g' | \
+        sudo tee /etc/apt/sources.list.d/nvidia-container-toolkit.list
+    apt-get update
+    apt-get install -y nvidia-container-toolkit
+    nvidia-ctk runtime configure --runtime=docker
+    systemctl restart docker
+  fi
 fi
 
 # Btop
@@ -118,24 +138,6 @@ if [ -n "$FLAG_ZFS" ]; then
   sudo apt install -y linux-headers-amd64
   sudo apt install -y -t stable-backports zfsutils-linux
   zpool import storage -f
-fi
-
-# Nvidia driver
-if [ -n "$FLAG_GPU" ]; then
-  announce Install GPU drivers
-  apt-get install -y nvidia-driver
-
-  if [ -n "$FLAG_GPU_DOCKER_TOOLKIT" ]; then
-    announce Install GPU Docker Toolkit
-    curl -fsSL https://nvidia.github.io/libnvidia-container/gpgkey | sudo gpg --dearmor -o /usr/share/keyrings/nvidia-container-toolkit-keyring.gpg \
-      && curl -s -L https://nvidia.github.io/libnvidia-container/stable/deb/nvidia-container-toolkit.list | \
-        sed 's#deb https://#deb [signed-by=/usr/share/keyrings/nvidia-container-toolkit-keyring.gpg] https://#g' | \
-        sudo tee /etc/apt/sources.list.d/nvidia-container-toolkit.list
-    apt-get update
-    apt-get install -y nvidia-container-toolkit
-    nvidia-ctk runtime configure --runtime=docker
-    systemctl restart docker
-  fi
 fi
 
 # Cleanup
