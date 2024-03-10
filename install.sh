@@ -47,6 +47,8 @@ usermod -aG sudo maxoux
 if [ -n "$FLAG_BASHRC" ]; then
   announce Installing bashrc
   wget $BASHRC_URL
+  mv .bashrc /home/$USER/
+  source /home/$USER/.bashrc
 fi
 
 # Docker
@@ -60,7 +62,7 @@ if [ -n "$FLAG_DOCKER" ]; then
   $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
   sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
   sudo apt-get update
-  apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+  apt-get -y install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
 
   announce Enabling docker for $USER
   usermod -aG docker maxoux
