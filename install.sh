@@ -98,7 +98,7 @@ fi
 # fail2ban
 if [ -n "$FLAG_FAIL2BAN" ]; then
   announce Installing Fail2Ban
-  apt-get install fail2ban
+  apt-get install -y fail2ban
   systemctl start fail2ban
   systemctl enable fail2ban
 fi
@@ -113,7 +113,7 @@ fi
 # Nvidia driver
 if [ -n "$FLAG_GPU" ]; then
   announce Install GPU drivers
-  apt-get install nvidia-driver
+  apt-get install -y nvidia-driver
 
   if [ -n "$FLAG_GPU_DOCKER_TOOLKIT" ]; then
     announce Install GPU Docker Toolkit
