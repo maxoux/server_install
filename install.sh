@@ -56,6 +56,7 @@ fi
 
 # SSH
 announce Setting up SSH keys
+mkdir /home/$USER/.ssh
 cat public_keys/* > /home/$USER/.ssh/authorized_keys
 
 # Bashrc
