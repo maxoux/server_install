@@ -35,7 +35,7 @@ cd $WORK_DIR
 
 if [ -n "$FLAG_UPDATE" ]; then
   announce Updating...
-  apt-get update -y && apt-get dist-upgrade -y && apt-get upgrade -y
+  apt-get update -y && apt-get upgrade -y
 fi
 
 # Default installs
