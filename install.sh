@@ -8,6 +8,7 @@ FLAG_NODE=1
 FLAG_FAIL2BAN=1
 FLAG_GPU=1
 FLAG_GPU_DOCKER_TOOLKIT=1
+FLAG_ZFS=1
 
 FLAG_CLEANUP=1
 
@@ -89,6 +90,13 @@ if [ -n "$FLAG_FAIL2BAN" ]; then
   apt-get install fail2ban
   systemctl start fail2ban
   systemctl enable fail2ban
+fi
+
+# ZFS
+if [ -n "$FLAG_ZFS" ]; then
+  announce Install ZFS Drivers
+  apt-get install -y linux-headers-amd64 zfsutils-linux zfs-dkms zfs-zed
+  zpool import storage -f
 fi
 
 # Nvidia driver
