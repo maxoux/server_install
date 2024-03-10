@@ -31,6 +31,9 @@ if [ "$(id -u)" -ne 0 ]; then echo "Please run as root." >&2; exit 1; fi
 echo Working Directory: $WORK_DIR
 cd $WORK_DIR
 
+announce Set up $USER as sudoer
+usermod -aG sudo maxoux
+
 if [ -n "$FLAG_UPDATE" ]; then
   announce Updating...
   apt-get update -y && apt-get dist-upgrade -y && apt-get upgrade -y
