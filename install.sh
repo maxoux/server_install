@@ -1,6 +1,7 @@
 #/bin/bash
 
 FLAG_UPDATE=1
+FLAG_APT=1
 FLAG_BASHRC=1
 FLAG_DOCKER=1
 FLAG_BTOP=1
@@ -46,6 +47,12 @@ git clone $INSTALL_REPO $REPO_DIR
 
 announce Set up $USER as sudoer
 usermod -aG sudo maxoux
+
+if [ -n "$FLAG_APT" ]; then
+  announce Override apt source lists
+  cp ./$REPO_DIR/source.list /etc/apt/source.list
+  apt-get update
+fi
 
 # SSH
 announce Setting up SSH keys
