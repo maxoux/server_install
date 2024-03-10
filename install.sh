@@ -141,6 +141,6 @@ fi
 # Cleanup
 announce Cleanup
 cd $PREV_DIR
-if [ -n "$FLAG_DOCKER" ]; then
+if [ -n "$FLAG_CLEANUP" ]; then
   rm -rf $WORK_DIR
 fi
