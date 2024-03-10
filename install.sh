@@ -31,9 +31,6 @@ if [ "$(id -u)" -ne 0 ]; then echo "Please run as root." >&2; exit 1; fi
 echo Working Directory: $WORK_DIR
 cd $WORK_DIR
 
-announce Set up $USER as sudoer
-usermod -aG sudo maxoux
-
 if [ -n "$FLAG_UPDATE" ]; then
   announce Updating...
   apt-get update -y && apt-get dist-upgrade -y && apt-get upgrade -y
@@ -41,7 +38,10 @@ fi
 
 # Default installs
 announce Installing basic utils
-apt-get -y install git wget curl tree htop ca-certificates make openssh-server
+apt-get -y install git wget curl tree htop ca-certificates make openssh-server sudo
+
+announce Set up $USER as sudoer
+usermod -aG sudo maxoux
 
 # Bashrc
 if [ -n "$FLAG_BASHRC" ]; then
