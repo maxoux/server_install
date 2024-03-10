@@ -83,7 +83,7 @@ if [ -n "$FLAG_DOCKER" ]; then
 fi
 
 # Btop
-BTOP_URL=git@github.com:aristocratos/btop.git
+BTOP_URL=https://github.com:aristocratos/btop.git
 if [ -n "$FLAG_BTOP" ]; then
   announce Installing Btop
   git clone $BTOP_URL
