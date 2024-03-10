@@ -15,4 +15,7 @@ deb-src http://deb.debian.org/debian/ bookworm-updates main non-free-firmware no
 # (e.g. netinst, live or single CD). The matching "deb cdrom"
 # entries were disabled at the end of the installation process.
 # For information about how to configure apt package sources,
-# see the sources.list(5) manual.
+# see the sources.list(5) manual.deb http://deb.debian.org/debian bookworm-backports main contrib non-free
+
+# For ZFS UTILS
+deb http://deb.debian.org/debian bookworm-backports main contrib non-free

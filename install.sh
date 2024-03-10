@@ -103,7 +103,7 @@ if [ -n "$FLAG_DOCKER" ]; then
 fi
 
 # Btop
-BTOP_URL=https://github.com:aristocratos/btop.git
+BTOP_URL=https://github.com/aristocratos/btop.git
 if [ -n "$FLAG_BTOP" ]; then
   announce Installing Btop
   git clone $BTOP_URL
@@ -133,8 +133,6 @@ fi
 # ZFS
 if [ -n "$FLAG_ZFS" ]; then
   announce Install ZFS Drivers
-  codename=$(lsb_release -cs);
-  echo "deb http://deb.debian.org/debian $codename-backports main contrib non-free"|sudo tee -a /etc/apt/sources.list && sudo apt update
   sudo apt install -y linux-headers-amd64
   sudo apt install -y -t stable-backports zfsutils-linux
   zpool import storage -f
