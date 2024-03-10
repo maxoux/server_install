@@ -13,7 +13,8 @@ FLAG_ZFS=1
 FLAG_CLEANUP=1
 
 USER=maxoux
-BASHRC_URL=https://raw.githubusercontent.com/maxoux/server_install/main/.bashrc
+INSTALL_REPO=https://github.com/maxoux/server_install
+REPO_DIR=repo
 WORK_DIR=$(mktemp -d)
 PREV_DIR=$(pwd)
 
@@ -40,15 +41,20 @@ fi
 announce Installing basic utils
 apt-get -y install git wget curl tree htop ca-certificates make openssh-server sudo
 
+announce Cloning Repository
+git clone $INSTALL_REPO $REPO_DIR
+
 announce Set up $USER as sudoer
 usermod -aG sudo maxoux
+
+# SSH
+announce Setting up SSH keys
+cat public_keys/* > /home/$USER/.ssh/authorized_keys
 
 # Bashrc
 if [ -n "$FLAG_BASHRC" ]; then
   announce Installing bashrc
-  wget $BASHRC_URL
-  mv .bashrc /home/$USER/
-  source /home/$USER/.bashrc
+  mv $REPO_DIR/.bashrc /home/$USER/
 fi
 
 # Docker
