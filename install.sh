@@ -1,17 +1,19 @@
 #/bin/bash
 
 FLAG_UPDATE=1
-FLAG_APT=1
+FLAG_APT=0
 FLAG_BASHRC=1
 FLAG_DOCKER=1
 FLAG_BTOP=1
 FLAG_NODE=1
 FLAG_FAIL2BAN=1
-FLAG_GPU=1
-FLAG_GPU_DOCKER_TOOLKIT=1
-FLAG_ZFS=1
+FLAG_GPU=0
+FLAG_GPU_DOCKER_TOOLKIT=0
+FLAG_ZFS=0
 
 # FLAG_CLEANUP=1
+
+SSH_HOSTNAME=maeve
 
 USER=maxoux
 INSTALL_REPO=https://github.com/maxoux/server_install
@@ -58,7 +60,7 @@ usermod -aG sudo maxoux
 # SSH
 announce Setting up SSH keys
 mkdir /home/$USER/.ssh
-cat ./$REPO_DIR/public_keys/* > /home/$USER/.ssh/authorized_keys
+cat ./$REPO_DIR/public_keys/$SSH_HOSTNAME/* > /home/$USER/.ssh/authorized_keys
 
 # Bashrc
 if [ -n "$FLAG_BASHRC" ]; then
