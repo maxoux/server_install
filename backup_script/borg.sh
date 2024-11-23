@@ -9,23 +9,26 @@ info "Starting backup"
 # Backup the most important directories into an archive named after
 # the machine this script is currently running on:
 
-borg create                         \
-    --verbose                       \
-    --filter AME                    \
-    --list                          \
-    --stats                         \
-    --show-rc                       \
-    --compression lz4               \
-    --exclude-caches                \
-    --exclude 'home/*/.cache/*'     \
-    --exclude '*/cache/*'           \
-    --exclude 'var/tmp/*'           \
-    --exclude '*/node_modules/*'    \
-                                    \
-    ::'{hostname}-{now}'            \
-    /etc                            \
-    /home                           \
-    /root                           \
+borg create                                  \
+    --verbose                                \
+    --filter AME                             \
+    --list                                   \
+    --stats                                  \
+    --show-rc                                \
+    --compression lz4                        \
+    --exclude-caches                         \
+    --exclude 'home/*/.cache/*'              \
+    --exclude '*/cache/*'                    \
+    --exclude '*/.cache/*'                   \
+    --exclude 'var/tmp/*'                    \
+    --exclude '*/node_modules/*'             \
+    --exclude '/home/backup/*'               \
+    --exclude '/var/lib/docker/overlay2/*'   \
+                                             \
+    ::'{hostname}-{now}'                     \
+    /etc                                     \
+    /home                                    \
+    /root                                    \
     /var
 
 backup_exit=$?
@@ -51,7 +54,7 @@ prune_exit=$?
 
 info "Compacting repository"
 
-borg compact
+#borg compact
 
 compact_exit=$?
 

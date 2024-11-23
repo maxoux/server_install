@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Get backup repository list and credentials
-. ./credentials.sh
+. /root/backup_script/credentials.sh
 
 echo Stopping Docker...
 systemctl stop docker
@@ -12,7 +12,7 @@ do
     echo -e "\nBackup to ${TARGET} => ${BACKUP_DEST[${TARGET}]}\n\n"
     export BORG_REPO=${BACKUP_DEST[${TARGET}]}
     export BORG_PASSPHRASE=${BACKUP_KEYS[${TARGET}]}
-    . ./borg.sh
+    . /root/backup_script/borg.sh
 done
 
 sleep 5
