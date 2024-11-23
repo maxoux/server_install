@@ -1,15 +1,15 @@
 #/bin/bash
 
 FLAG_UPDATE=1
-FLAG_APT=0
+# FLAG_APT=0
 FLAG_BASHRC=1
 FLAG_DOCKER=1
 FLAG_BTOP=1
 FLAG_NODE=1
 FLAG_FAIL2BAN=1
-FLAG_GPU=0
-FLAG_GPU_DOCKER_TOOLKIT=0
-FLAG_ZFS=0
+# FLAG_GPU=0
+# FLAG_GPU_DOCKER_TOOLKIT=0
+# FLAG_ZFS=0
 
 # FLAG_CLEANUP=1
 
@@ -55,7 +55,7 @@ if [ -n "$FLAG_APT" ]; then
 fi
 
 announce Set up $USER as sudoer
-usermod -aG sudo maxoux
+/usr/sbin/usermod -aG sudo maxoux
 
 # SSH
 announce Setting up SSH keys
@@ -139,6 +139,8 @@ if [ -n "$FLAG_ZFS" ]; then
   sudo apt install -y -t stable-backports zfsutils-linux
   zpool import storage -f
 fi
+
+
 
 # Cleanup
 announce Cleanup
